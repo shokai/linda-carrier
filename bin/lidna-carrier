@@ -1,0 +1,44 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'bundler/setup'
+require 'eventmachine'
+require 'em-rocketio-linda-client'
+require 'hashie'
+require 'args_parser'
+$stdout.sync = true
+
+args = ArgsParser.parse ARGV do
+  arg :base, 'linda base URL', :default => 'http://linda.shokai.org'
+  arg :space, 'linda space name', :default => 'test'
+  arg :help, 'show help', :alias => :h
+
+  on :help do
+    STDERR.puts "em-rocketio-linda-client v#{EM::RocketIO::Linda::Client::VERSION}"
+    exit 1
+  end
+end
+
+workers = Dir.glob(File.expand_path "../workers/worker_*.rb", File.dirname(__FILE__)).map{|i|
+  Hashie::Mash.new :code => File.open(i).read, :path => i, :name => File.basename(i)
+}
+workers.each do |w|
+  puts "#{w.name} loaded"
+end
+
+EM::run do
+  linda = EM::RocketIO::Linda::Client.new "http://linda.shokai.org"
+  ts = linda.tuplespace["test"]
+
+  linda.io.on :connect do
+    puts "connect!! <#{linda.io.session}> (#{linda.io.type})"
+
+    workers.each do |w|
+      ts.instance_eval w.code
+    end
+  end
+
+  linda.io.on :disconnect do
+    puts "RocketIO disconnected.."
+  end
+
+end
