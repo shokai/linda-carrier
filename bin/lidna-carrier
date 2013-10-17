@@ -3,8 +3,9 @@ require 'rubygems'
 require 'bundler/setup'
 require 'eventmachine'
 require 'em-rocketio-linda-client'
-require 'hashie'
 require 'args_parser'
+$:.unshift File.expand_path '../lib', File.dirname(__FILE__)
+require 'deck'
 $stdout.sync = true
 
 args = ArgsParser.parse ARGV do
@@ -14,26 +15,23 @@ args = ArgsParser.parse ARGV do
 
   on :help do
     STDERR.puts "em-rocketio-linda-client v#{EM::RocketIO::Linda::Client::VERSION}"
+    STDERR.puts help
     exit 1
   end
 end
 
-workers = Dir.glob(File.expand_path "../workers/worker_*.rb", File.dirname(__FILE__)).map{|i|
-  Hashie::Mash.new :code => File.open(i).read, :path => i, :name => File.basename(i)
-}
-workers.each do |w|
-  puts "#{w.name} loaded"
-end
+deck = LindaCarrier::Deck.new
 
 EM::run do
-  linda = EM::RocketIO::Linda::Client.new "http://linda.shokai.org"
-  ts = linda.tuplespace["test"]
+  linda = EM::RocketIO::Linda::Client.new args[:base]
+  ts = linda.tuplespace[args[:space]]
 
   linda.io.on :connect do
     puts "connect!! <#{linda.io.session}> (#{linda.io.type})"
 
-    workers.each do |w|
+    deck.workers.each do |w|
       ts.instance_eval w.code
+      puts "#{w.name} loaded"
     end
   end
 
