@@ -1,7 +1,7 @@
-watch ["calc"] do |tuple|
-  p tuple
-  next unless tuple.size == 4
-  _,op,a,b = tuple
+watch ["calc"] do |t|
+  p t
+  next unless t.size == 4
+  _,op,a,b = t
   result =
     case op
     when "*"
@@ -13,6 +13,6 @@ watch ["calc"] do |tuple|
     when "+"
       a.to_i + b.to_i
     end
-  tuple.push result
-  write tuple
+  t.push result
+  write t
 end
