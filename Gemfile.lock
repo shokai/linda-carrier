@@ -28,11 +28,11 @@ GEM
       hashie
     em-socksify (0.3.0)
       eventmachine (>= 1.0.0.beta.4)
-    em-websocket-client (0.1.1)
+    em-websocket-client (0.1.2)
       eventmachine
-      libwebsocket
-    em-websocketio-client (0.0.3)
-      em-websocket-client
+      websocket
+    em-websocketio-client (0.0.4)
+      em-websocket-client (= 0.1.2)
       event_emitter
       eventmachine
       json
@@ -40,10 +40,7 @@ GEM
     eventmachine (1.0.3)
     hashie (2.0.5)
     http_parser.rb (0.6.0.beta.2)
-    json (1.8.0)
-    libwebsocket (0.1.8)
-      addressable
-      websocket
+    json (1.8.1)
     websocket (1.1.1)
 
 PLATFORMS
@@ -52,5 +49,4 @@ PLATFORMS
 DEPENDENCIES
   args_parser
   em-rocketio-linda-client
-  em-websocket-client (= 0.1.1)
   hashie
