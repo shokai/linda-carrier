@@ -30,7 +30,7 @@ EM::run do
     deck.workers.each do |w|
       ts = linda.tuplespace[w.space]
       ts.instance_eval w.code
-      puts "#{w.path} loaded"
+      puts "worker:#{w.path} => space:#{w.space}"
     end
   end
 

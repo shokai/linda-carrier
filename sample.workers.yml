@@ -1,0 +1,8 @@
+space_name :
+  - workers/calc.rb
+  - workers/light_say.rb
+  ## - path/to/worker.rb
+space2 :
+  ## - path/to/worker.rb
+space3 :
+  ## - path/to/worker.rb

@@ -11,7 +11,9 @@ module LindaCarrier
       @workers = []
       @config = Hashie::Mash.new YAML.load File.open(config_file_path).read
       @config.each do |space, items|
+        next unless items
         items.each do |i|
+          raise "worker \"#{i}\" not exists" unless File.exists? i
           @workers << Hashie::Mash.new(
                                       :code => File.open(i).read,
                                       :path => i,
