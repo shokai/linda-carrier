@@ -10,7 +10,6 @@ $stdout.sync = true
 
 args = ArgsParser.parse ARGV do
   arg :base, 'linda base URL', :default => 'http://linda.shokai.org'
-  arg :space, 'linda space name', :default => 'test'
   arg :help, 'show help', :alias => :h
 
   on :help do
@@ -24,14 +23,14 @@ deck = LindaCarrier::Deck.new
 
 EM::run do
   linda = EM::RocketIO::Linda::Client.new args[:base]
-  ts = linda.tuplespace[args[:space]]
 
   linda.io.on :connect do
     puts "connect!! <#{linda.io.session}> (#{linda.io.type})"
 
     deck.workers.each do |w|
+      ts = linda.tuplespace[w.space]
       ts.instance_eval w.code
-      puts "#{w.name} loaded"
+      puts "#{w.path} loaded"
     end
   end
 
