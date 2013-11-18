@@ -5,6 +5,7 @@ require 'eventmachine'
 require 'em-rocketio-linda-client'
 require 'args_parser'
 $:.unshift File.expand_path '../lib', File.dirname(__FILE__)
+require 'gist'
 require 'deck'
 $stdout.sync = true
 

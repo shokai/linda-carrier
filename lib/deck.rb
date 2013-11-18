@@ -13,9 +13,15 @@ module LindaCarrier
       @config.each do |space, items|
         next unless items
         items.each do |i|
-          raise "worker \"#{i}\" not exists" unless File.exists? i
+          code = case i
+                 when /^https:\/\/gist\.github\.com\/.+\/\d+$/
+                   Gist.new(i).code
+                 else
+                   raise "worker \"#{i}\" not exists" unless File.exists? i
+                   File.open(i).read
+                 end
           @workers << Hashie::Mash.new(
-                                      :code => File.open(i).read,
+                                      :code => code,
                                       :path => i,
                                       :space => space
                                       )
