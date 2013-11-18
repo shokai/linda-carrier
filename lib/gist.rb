@@ -3,9 +3,10 @@ require 'httparty'
 
 module LindaCarrier
   class Gist
-    attr_reader :data, :code
+    attr_reader :url, :data, :code
 
     def initialize(url)
+      @url = url
       res = HTTParty.get "#{url}.json"
       raise "#{url} get error (code:#{res.code})" unless res.code == 200
       @data = JSON.parse res.body
