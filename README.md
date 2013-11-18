@@ -21,9 +21,13 @@ Install Rubygems
     % bundle install
 
 
-Workers
--------
-put workers into `workers` directory
+Config Workers
+--------------
+
+    % cp sample.workers.yml workers.yml
+
+and edit it.
+
 
 
 Run
@@ -34,7 +38,7 @@ set ENV var "LINDA_BASE" and "LINDA_SPACE"
     % export LINDA_BASE=http://linda.example.com
     % export LINDA_SPACE=test
     % bundle exec ruby bin/linda-carrier.rb --help
-    % bundle exec ruby bin/linda-carrier.rb --base http://linda.shokai.org -space test
+    % bundle exec ruby bin/linda-carrier.rb --base http://linda.shokai.org
 
 
 Install as Service
