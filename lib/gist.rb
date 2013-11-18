@@ -12,7 +12,7 @@ module LindaCarrier
       code_file = @data['files'].find{|i| i =~ /.+\.rb$/ }
 
       res2 = HTTParty.get "#{url}/raw/#{code_file}"
-      raise "#{url} get error (code:#{res.code})" unless res2.code == 200
+      raise "#{url} get error (code:#{res2.code})" unless res2.code == 200
       @code = res2.body
     end
   end
